@@ -17,20 +17,25 @@
       </v-tabs>
       <v-window>
         <v-window-item v-for="team in teams" :key="team.owner" :value="selectedTab">
-          <div class="d-flex flex-column align-center">
-          <v-img contain height="200" width="200" class="mt-4" :src="selectedTeam.logo"></v-img>
-          <p>{{ selectedTeam.owner }}</p>
-          <div class="mt-6 calculations">
-              <v-card elevation="15" outlined class="pa-4">
-                <p class="mb-2">Starting Salary Cap = {{ formatPrice(selectedTeam.startingSalaryCap) }}</p>
-                <p class="mb-2">Total Player Salary = {{ formatPrice(getTotalPlayerSalary(selectedTeam.players)) }}</p>
-                <p class="mb-2">Salary Cap Remaining = <span :class="{'red--text': getSalaryCapRemaining(selectedTeam) < 0}">{{ formatPrice(getSalaryCapRemaining(selectedTeam)) }}</span></p>
-                <p class="mb-2">100% Tax = {{ formatPrice(get100Tax(selectedTeam)) }}</p>
-                <p class="mb-1">200% Tax = {{ formatPrice(get200Tax(selectedTeam)) }}</p>
-                <p class="grand-total pt-1">GRAND TOTAL = {{ formatPrice(getGrandTotal(selectedTeam)) }}</p>
-              </v-card>
+          <div class="d-flex">
+            <team-table :team="selectedTeam"></team-table>
+            <div>
+              <div class="d-flex flex-column align-center selected-team-container">
+              <v-img contain height="200" width="200" class="mt-4" :src="selectedTeam.logo"></v-img>
+              <p>{{ selectedTeam.owner }}</p>
+              <div class="mt-6 calculations">
+                  <v-card elevation="15" outlined class="pa-4">
+                    <p class="mb-2">Starting Salary Cap = {{ formatPrice(selectedTeam.startingSalaryCap) }}</p>
+                    <p class="mb-2">Total Player Salary = {{ formatPrice(getTotalPlayerSalary(selectedTeam.players)) }}</p>
+                    <p class="mb-2">Salary Cap Remaining = <span :class="{'red--text': getSalaryCapRemaining(selectedTeam) < 0}">{{ formatPrice(getSalaryCapRemaining(selectedTeam)) }}</span></p>
+                    <p class="mb-2">100% Tax = {{ formatPrice(get100Tax(selectedTeam)) }}</p>
+                    <p class="mb-1">200% Tax = {{ formatPrice(get200Tax(selectedTeam)) }}</p>
+                    <p class="grand-total pt-1">GRAND TOTAL = {{ formatPrice(getGrandTotal(selectedTeam)) }}</p>
+                  </v-card>
+                </div>
+                </div>
             </div>
-            </div>
+          </div> 
         </v-window-item>
       </v-window>
     </div>
@@ -177,6 +182,128 @@ import JpgDodgers from '@/assets/dodgers.jpg';
     getTotalPlayerSalary(players) {
       return players.map((player) => parseInt(player.salary, 10)).reduce((prev, curr) => prev + curr, 0);
     },
+    init() {
+      this.teams = this.teams.map((team) => {
+        const localStorage = JSON.parse(window.localStorage.getItem(team.name));
+
+        if (localStorage) {
+          team.players = localStorage;
+        } else {
+          team.players = [
+            {
+              name: '',
+              position: 'C',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: '1B',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: '2B',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: '3B',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'SS',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'OF1',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'OF2',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'OF3',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'Util',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'SP1',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'SP2',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'RP1',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'RP2',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'P1',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'P2',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'P3',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'B1',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'B2',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'B3',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'B4',
+              salary: 0,
+            },
+            {
+              name: '',
+              position: 'B5',
+              salary: 0,
+            },
+          ];
+        }
+        return team;
+      });
+    },
+  },
+
+  mounted() {
+    this.init();
   },
   }
 </script>
@@ -206,5 +333,9 @@ p {
   margin-left: 8px;
   min-width: 205px;
   text-align: left;
+}
+
+.selected-team-container {
+  width: 600px;
 }
 </style>
