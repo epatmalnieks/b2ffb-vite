@@ -15,9 +15,9 @@
         v-model="editedItem.name"
         class="team-table-name"
         clearable 
-        :hide-details="true" 
         density="compact"
         single-line
+        :hide-details="true" 
         @keyup.enter="saveClicked"
       />
       <span v-else>{{ item.name }}</span>
@@ -29,9 +29,9 @@
         type="number" 
         class="team-table-salary" 
         min="0" 
-        :hide-details="true"
         density="compact" 
         single-line 
+        :hide-details="true"
         @keyup.enter="saveClicked"
       />
       <span v-else>{{ item.salary }}</span>
@@ -76,6 +76,7 @@ export default {
       type: Object,
     },
   },
+
   data: () => ({
     defaultItem: {
       id: 0,
@@ -112,6 +113,7 @@ export default {
       },
     ],
   }),
+
   methods: {
     closeClicked() {
       this.editedItem = { ...this.defaultItem };
@@ -130,7 +132,9 @@ export default {
         }
         Object.assign(this.team.players[this.editedIndex], this.editedItem);
       }
+
       window.localStorage.setItem(this.team.name, JSON.stringify(this.team.players));
+
       this.closeClicked();
     },
   },
@@ -150,6 +154,7 @@ export default {
 .team-table-name {
   min-width: 150px;
 }
+
 .team-table-salary {
   width: 90px;
 }
