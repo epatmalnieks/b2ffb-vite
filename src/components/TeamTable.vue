@@ -14,7 +14,7 @@
           v-if="item.position === editedItem.position"
           class="team-table-name"
           clearable
-          v-on:keyup.enter="save" 
+          v-on:keyup.enter="saveClicked" 
           v-model="editedItem.name" 
           :hide-details="true"
           density="compact"
@@ -27,7 +27,7 @@
           type="number" 
           class="team-table-salary"
           min="0" 
-          v-on:keyup.enter="save" 
+          v-on:keyup.enter="saveClicked" 
           v-model="editedItem.salary" 
           :hide-details="true"
           density="compact" 
@@ -38,15 +38,15 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <div v-if="item.position === editedItem.position">
-          <v-icon color="red" class="mr-3" @click="close">
+          <v-icon color="red" class="mr-3" @click="closeClicked">
             mdi-window-close
           </v-icon>
-          <v-icon color="green" @click="save">
+          <v-icon color="green" @click="saveClicked">
             mdi-content-save
           </v-icon>
         </div>
         <div v-else>
-          <v-icon color="green" class="mr-3" @click="editItem(item)">
+          <v-icon color="green" class="mr-3" @click="editClicked(item)">
             mdi-pencil
           </v-icon>
         </div>
@@ -94,17 +94,17 @@ export default {
     ],
   }),
   methods: {
-    close() {
+    closeClicked() {
       this.editedItem = { ...this.defaultItem };
       this.editedIndex = -1;
     },
 
-    editItem(item) {
+    editClicked(item) {
       this.editedIndex = this.team.players.indexOf(item);
       this.editedItem = { ...item };
     },
 
-    save() {
+    saveClicked() {
       if (this.editedIndex > -1) {
         if (this.editedItem.salary === '') {
           this.editedItem.salary = 0;
@@ -112,12 +112,12 @@ export default {
         Object.assign(this.team.players[this.editedIndex], this.editedItem);
       }
       window.localStorage.setItem(this.team.name, JSON.stringify(this.team.players));
-      this.close();
+      this.closeClicked();
     },
   },
 
   name: 'TeamTable',
-  
+
   props: {
     team: {
       required: true,
