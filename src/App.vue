@@ -1,44 +1,86 @@
 <template>
   <v-app>
     <v-main>
-    <div class="d-flex app-container">
-      <v-tabs
-        v-model="selectedTab"
-        direction="vertical"
-        bg-color="primary"
-      >
-        <v-tab v-for="(team, index) in teams" :value="team.owner" :key="team.name" :class="{'division-divider': index === 3 || index === 7}">
-          <v-img contain height="30" width="30" :src="team.logo"></v-img>
-          <span class="team-name">{{ team.name }}</span>
-        </v-tab>
-        <div class="d-flex justify-center mt-16">
-          <v-btn width="100px" color="error" @click="clearClicked">Clear</v-btn>
-        </div>
-      </v-tabs>
-      <v-window>
-        <v-window-item v-for="team in teams" :key="team.owner" :value="selectedTab">
-          <div class="d-flex">
-            <team-table :team="selectedTeam"></team-table>
-            <div>
-              <div class="d-flex flex-column align-center selected-team-container">
-              <v-img contain height="200" width="200" class="mt-4" :src="selectedTeam.logo"></v-img>
-              <p>{{ selectedTeam.owner }}</p>
-              <div class="mt-6 calculations">
-                  <v-card elevation="15" outlined class="pa-4">
-                    <p class="mb-2">Starting Salary Cap = {{ formatPrice(selectedTeam.startingSalaryCap) }}</p>
-                    <p class="mb-2">Total Player Salary = {{ formatPrice(getTotalPlayerSalary(selectedTeam.players)) }}</p>
-                    <p class="mb-2">Salary Cap Remaining = <span :class="{'red--text': getSalaryCapRemaining(selectedTeam) < 0}">{{ formatPrice(getSalaryCapRemaining(selectedTeam)) }}</span></p>
-                    <p class="mb-2">100% Tax = {{ formatPrice(get100Tax(selectedTeam)) }}</p>
-                    <p class="mb-1">200% Tax = {{ formatPrice(get200Tax(selectedTeam)) }}</p>
-                    <p class="grand-total pt-1">GRAND TOTAL = {{ formatPrice(getGrandTotal(selectedTeam)) }}</p>
-                  </v-card>
+      <div class="d-flex app-container">
+        <v-tabs
+          v-model="selectedTab"
+          direction="vertical"
+          bg-color="primary"
+        >
+          <v-tab
+            v-for="(team, index) in teams"
+            :key="team.name"
+            :value="team.owner"
+            :class="{'division-divider': index === 3 || index === 7}"
+          >
+            <v-img
+              contain
+              height="30"
+              width="30"
+              :src="team.logo"
+            />
+            <span class="team-name">{{ team.name }}</span>
+          </v-tab>
+          <div class="d-flex justify-center mt-16">
+            <v-btn
+              width="100px"
+              color="error"
+              @click="clearClicked"
+            >
+              Clear
+            </v-btn>
+          </div>
+        </v-tabs>
+        <v-window>
+          <v-window-item
+            v-for="team in teams"
+            :key="team.owner"
+            :value="selectedTab"
+          >
+            <div class="d-flex">
+              <team-table :team="selectedTeam" />
+              <div>
+                <div class="d-flex flex-column align-center selected-team-container">
+                  <v-img
+                    contain
+                    height="200"
+                    width="200"
+                    class="mt-4"
+                    :src="selectedTeam.logo"
+                  />
+                  <p>{{ selectedTeam.owner }}</p>
+                  <div class="mt-6 calculations">
+                    <v-card
+                      elevation="15"
+                      outlined
+                      class="pa-4"
+                    >
+                      <p class="mb-2">
+                        Starting Salary Cap = {{ formatPrice(selectedTeam.startingSalaryCap) }}
+                      </p>
+                      <p class="mb-2">
+                        Total Player Salary = {{ formatPrice(getTotalPlayerSalary(selectedTeam.players)) }}
+                      </p>
+                      <p class="mb-2">
+                        Salary Cap Remaining = <span :class="{'red--text': getSalaryCapRemaining(selectedTeam) < 0}">{{ formatPrice(getSalaryCapRemaining(selectedTeam)) }}</span>
+                      </p>
+                      <p class="mb-2">
+                        100% Tax = {{ formatPrice(get100Tax(selectedTeam)) }}
+                      </p>
+                      <p class="mb-1">
+                        200% Tax = {{ formatPrice(get200Tax(selectedTeam)) }}
+                      </p>
+                      <p class="grand-total pt-1">
+                        GRAND TOTAL = {{ formatPrice(getGrandTotal(selectedTeam)) }}
+                      </p>
+                    </v-card>
+                  </div>
                 </div>
-                </div>
-            </div>
-          </div> 
-        </v-window-item>
-      </v-window>
-    </div>
+              </div>
+            </div> 
+          </v-window-item>
+        </v-window>
+      </div>
     </v-main>
   </v-app>
 </template>
@@ -142,6 +184,10 @@ import JpgDodgers from '@/assets/dodgers.jpg';
     selectedTeam(){
       return this.teams.find((team)=>team.owner === this.selectedTab)
     }
+  },
+
+  mounted() {
+    this.init();
   },
   methods: {
     clearClicked(){
@@ -303,10 +349,6 @@ import JpgDodgers from '@/assets/dodgers.jpg';
         return team;
       });
     },
-  },
-
-  mounted() {
-    this.init();
   },
   }
 </script>
