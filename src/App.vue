@@ -203,38 +203,50 @@ export default {
   mounted() {
     this.init();
   },
+
   methods: {
     clearClicked() {
       if (window.confirm("Are you sure you want to clear everything?")) {
-        window.localStorage.clear();
+        this.teams.forEach((team) => {
+          window.localStorage.removeItem(team.name);
+        });
+
         this.init();
       }
     },
+
     formatPrice(value) {
       const formatter = new Intl.NumberFormat("en-US", {
         currency: "USD",
         minimumFractionDigits: 0,
         style: "currency",
       });
+
       return formatter.format(value);
     },
+
     get100Tax(team) {
       if (this.getSalaryCapRemaining(team) < 0) {
         const taxableAmount =
           this.getTotalPlayerSalary(team.players) - team.startingSalaryCap;
         return taxableAmount > 100 ? 100 : taxableAmount;
       }
+
       return 0;
     },
+
     get200Tax(team) {
       if (this.getSalaryCapRemaining(team) < -100) {
         let taxableAmount =
           this.getTotalPlayerSalary(team.players) - team.startingSalaryCap;
         taxableAmount -= 100;
+
         return taxableAmount * 2;
       }
+
       return 0;
     },
+
     getGrandTotal(team) {
       return (
         this.getTotalPlayerSalary(team.players) +
@@ -242,17 +254,21 @@ export default {
         this.get200Tax(team)
       );
     },
+
     getLogo(logo) {
       return `@/assets/${logo}.jpg`;
     },
+
     getSalaryCapRemaining(team) {
       return team.startingSalaryCap - this.getTotalPlayerSalary(team.players);
     },
+
     getTotalPlayerSalary(players) {
       return players
         .map((player) => parseInt(player.salary, 10))
         .reduce((prev, curr) => prev + curr, 0);
     },
+
     init() {
       this.teams = this.teams.map((team) => {
         const localStorage = JSON.parse(window.localStorage.getItem(team.name));
