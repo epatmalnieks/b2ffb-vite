@@ -64,12 +64,15 @@ export default {
       position: 0,
       salary: 0,
     },
+
     editedIndex: -1,
+
     editedItem: {
       name: '',
       position: 0,
       salary: 0,
     },
+
     headers: [
       {
         title: 'Position',
@@ -95,10 +98,12 @@ export default {
       this.editedItem = { ...this.defaultItem };
       this.editedIndex = -1;
     },
+
     editItem(item) {
       this.editedIndex = this.team.players.indexOf(item);
       this.editedItem = { ...item };
     },
+
     save() {
       if (this.editedIndex > -1) {
         if (this.editedItem.salary === '') {
@@ -110,7 +115,9 @@ export default {
       this.close();
     },
   },
+
   name: 'TeamTable',
+  
   props: {
     team: {
       required: true,

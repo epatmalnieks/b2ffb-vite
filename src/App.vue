@@ -145,7 +145,10 @@ import JpgDodgers from '@/assets/dodgers.jpg';
   },
   methods: {
     clearClicked(){
-
+      if (window.confirm('Are you sure you want to clear everything?')) {
+        window.localStorage.clear();
+        this.init();
+      }
     },
   formatPrice(value) {
       const formatter = new Intl.NumberFormat('en-US', {
