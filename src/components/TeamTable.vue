@@ -1,36 +1,36 @@
 <template>
-  <v-data-table 
+  <v-data-table
     class="team-table"
     density="compact"
-    :headers="headers" 
+    :headers="headers"
     :items-per-page="-1"
-    :items="team.players" 
+    :items="team.players"
   >
     <template #[`item.position`]="{ item }">
       <span class="team-table-position">{{ item.position }}</span>
     </template>
-    <template #[`item.name`]="{item}">
-      <v-text-field 
+    <template #[`item.name`]="{ item }">
+      <v-text-field
         v-if="item.position === editedItem.position"
         v-model="editedItem.name"
         class="team-table-name"
-        clearable 
+        clearable
         density="compact"
         single-line
-        :hide-details="true" 
+        :hide-details="true"
         @keyup.enter="saveClicked"
       />
       <span v-else>{{ item.name }}</span>
     </template>
     <template #[`item.salary`]="{ item }">
-      <v-text-field 
-        v-if="item.position === editedItem.position" 
+      <v-text-field
+        v-if="item.position === editedItem.position"
         v-model="editedItem.salary"
-        type="number" 
-        class="team-table-salary" 
-        min="0" 
-        density="compact" 
-        single-line 
+        type="number"
+        class="team-table-salary"
+        min="0"
+        density="compact"
+        single-line
         :hide-details="true"
         @keyup.enter="saveClicked"
       />
@@ -38,26 +38,13 @@
     </template>
     <template #[`item.actions`]="{ item }">
       <div v-if="item.position === editedItem.position">
-        <v-icon
-          color="red"
-          class="mr-3"
-          @click="closeClicked"
-        >
+        <v-icon color="red" class="mr-3" @click="closeClicked">
           mdi-window-close
         </v-icon>
-        <v-icon
-          color="green"
-          @click="saveClicked"
-        >
-          mdi-content-save
-        </v-icon>
+        <v-icon color="green" @click="saveClicked"> mdi-content-save </v-icon>
       </div>
       <div v-else>
-        <v-icon
-          color="green"
-          class="mr-3"
-          @click="editClicked(item)"
-        >
+        <v-icon color="green" class="mr-3" @click="editClicked(item)">
           mdi-pencil
         </v-icon>
       </div>
@@ -68,7 +55,7 @@
 
 <script>
 export default {
-  name: 'TeamTable',
+  name: "TeamTable",
 
   props: {
     team: {
@@ -80,7 +67,7 @@ export default {
   data: () => ({
     defaultItem: {
       id: 0,
-      name: 'New Item',
+      name: "New Item",
       position: 0,
       salary: 0,
     },
@@ -88,28 +75,28 @@ export default {
     editedIndex: -1,
 
     editedItem: {
-      name: '',
+      name: "",
       position: 0,
       salary: 0,
     },
 
     headers: [
       {
-        title: 'Position',
-        value: 'position',
+        title: "Position",
+        value: "position",
       },
       {
-        title: 'Name',
-        value: 'name',
+        title: "Name",
+        value: "name",
       },
       {
-        title: 'Salary',
-        value: 'salary',
+        title: "Salary",
+        value: "salary",
       },
       {
-        title: 'Actions',
-        value: 'actions',
-        width: '100px',
+        title: "Actions",
+        value: "actions",
+        width: "100px",
       },
     ],
   }),
@@ -127,13 +114,16 @@ export default {
 
     saveClicked() {
       if (this.editedIndex > -1) {
-        if (this.editedItem.salary === '') {
+        if (this.editedItem.salary === "") {
           this.editedItem.salary = 0;
         }
         Object.assign(this.team.players[this.editedIndex], this.editedItem);
       }
 
-      window.localStorage.setItem(this.team.name, JSON.stringify(this.team.players));
+      window.localStorage.setItem(
+        this.team.name,
+        JSON.stringify(this.team.players),
+      );
 
       this.closeClicked();
     },
